@@ -29,9 +29,16 @@ class NarrowBand(object):
                           ]
         # Set pin numbering mode
         GPIO.setmode(GPIO.BCM)
+        self._print('Setting BCM Mode')
         for pin in (self.pin_rw, self.pin_as, self.pin_ds):
             GPIO.setup(pin, GPIO.OUT)
-
+        self._print("Setting RW, AS, and DS pins to output pins")
+        
+    def _print(self, msg, loglevel=logging.INFO, ):
+        if self.debug:
+            print(msg)
+        logging.log(level=loglevel, msg=msg)
+    
     def write_adrs(self, addr):
         """
         Write specified address to IF Processor
@@ -48,11 +55,13 @@ class NarrowBand(object):
         for (adr_pin, adr_val) in zip(self.address_pins, bit_list):
             GPIO.output(adr_pin, adr_val)
 
+        self._print("Set address to %s" % addr)
         # generate address strobe
         GPIO.output(self.pin_as, GPIO.HIGH)
         GPIO.output(self.pin_as, GPIO.LOW)
         GPIO.output(self.pin_as, GPIO.HIGH)
-
+        self._print("Generate Address strobe")
+        
     def write_byte(self, addr, data):
         """
         Write byte to IF Processor.
@@ -60,11 +69,12 @@ class NarrowBand(object):
         data byte
         """
         self.write_adrs(addr)
-        
+        self._print("Wrote address : %s" % addr)
         # first setup the eight lowest data pins as output pins
         for pin in self.address_pins:
             GPIO.setup(pin, GPIO.OUT)        
 
+        self._print("Writing data: %s" % data)
         data = data & 0xFF
         bit_list = [(data >> i) & 1 for i in range(8)]
         for (adr_pin, adr_val) in zip(self.address_pins, bit_list):
@@ -74,7 +84,7 @@ class NarrowBand(object):
         GPIO.output(self.pin_ds, GPIO.HIGH)
         GPIO.output(self.pin_ds, GPIO.LOW)
         GPIO.output(self.pin_ds, GPIO.HIGH)
-
+        self._print("Generated data strobe")
         # Set data inputs to input
         # Set R/W to R
         
