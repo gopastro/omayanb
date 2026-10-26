@@ -1,0 +1,105 @@
+import os
+import datetime
+import logging
+
+import RPi.GPIO as GPIO
+
+
+class NarrowBand(object):
+    """
+    A0-A7/D0-D7: Raspberry PI pins 4, 5, 6, 7, 8, 9, 10, 11
+    D8-D15: Raspberry PI pins 12, 13, 14, 15, 16, 17, 18, 19
+    R/W: 20
+    A/S: 21
+    D/S: 22
+    """
+    def __init__(self, debug=True):
+        self.debug = debug
+        logdir = os.path.join(os.path.expanduser('~'), 'logs')
+        logfile = os.path.join(logdir, datetime.datetime.now().strftime('omayanb_%Y_%m_%d_%H%M.log'))
+        logging.basicConfig(filename=logfile,
+                            level=logging.INFO,
+                            format='%(asctime)s %(levelname)s: %(message)s')
+        self.pin_rw = 20           # Pin for R/W
+        self.pin_as = 21           # Pin for Address Strobe
+        self.pin_ds = 22           # Pin for Data Strobe
+        self.address_pins = [4, 5, 6, 7, 8, 9, 10, 11]
+        self.data_pins = [4, 5, 6, 7, 8, 9, 10, 11,
+                          12, 13, 14, 15, 16, 17, 18, 19
+                          ]
+        # Set pin numbering mode
+        GPIO.setmode(GPIO.BCM)
+        for pin in (self.pin_rw, self.pin_as, self.pin_ds):
+            GPIO.setup(pin, GPIO.OUT)
+
+    def write_adrs(self, addr):
+        """
+        Write specified address to IF Processor
+        """
+        # first setup the address pins as output pins
+        for pin in self.address_pins:
+            GPIO.setup(pin, GPIO.OUT)
+
+        # set IF R/W to write
+        GPIO.output(self.pin_rw, GPIO.LOW)
+            
+        bit_list = [(addr >> i) & 1 for i in range(8)]
+
+        for (adr_pin, adr_val) in zip(self.address_pins, bit_list):
+            GPIO.output(adr_pin, adr_val)
+
+        # generate address strobe
+        GPIO.output(self.pin_as, GPIO.HIGH)
+        GPIO.output(self.pin_as, GPIO.LOW)
+        GPIO.output(self.pin_as, GPIO.HIGH)
+
+    def write_byte(self, addr, data):
+        """
+        Write byte to IF Processor.
+        Write address first and then write
+        data byte
+        """
+        self.write_adrs(addr)
+        
+        # first setup the eight lowest data pins as output pins
+        for pin in self.address_pins:
+            GPIO.setup(pin, GPIO.OUT)        
+
+        data = date & 0xFF
+        bit_list = [(data >> i) & 1 for i in range(8)]
+        for (adr_pin, adr_val) in zip(self.address_pins, bit_list):
+            GPIO.output(adr_pin, adr_val)
+
+        # Generate data strobe
+        GPIO.output(self.pin_ds, GPIO.HIGH)
+        GPIO.output(self.pin_ds, GPIO.LOW)
+        GPIO.output(self.pin_ds, GPIO.HIGH)
+
+        # Set data inputs to input
+        # Set R/W to R
+        
+    def read_byte(self, addr):
+        """
+        read byte from IF processor
+        Write address and then read a byte
+        """
+        self.write_adrs(addr)
+
+        # set A0/D0 through A7/D7 to input
+        for pin in self.address_pins:
+            GPIO.setup(pin, GPIO.IN)
+
+        # Generate Data Strobe
+        GPIO.output(self.pin_ds, GPIO.HIGH)
+        GPIO.output(self.pin_ds, GPIO.LOW)
+
+        # parallel read data pins
+        byte_value = 0
+        for pin in self.address_pins:
+            byte_value = (byte_value << 1)|GPIO.input(pin)
+
+        # reset data probe
+        GPIO.output(self.pin_ds, GPIO.HIGH)
+        return byte_value
+
+
