@@ -65,7 +65,7 @@ class NarrowBand(object):
         for pin in self.address_pins:
             GPIO.setup(pin, GPIO.OUT)        
 
-        data = date & 0xFF
+        data = data & 0xFF
         bit_list = [(data >> i) & 1 for i in range(8)]
         for (adr_pin, adr_val) in zip(self.address_pins, bit_list):
             GPIO.output(adr_pin, adr_val)
