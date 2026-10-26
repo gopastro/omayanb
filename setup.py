@@ -10,7 +10,7 @@ setup(
     description='OMAyA Narrowband IF Processor Monitor and Control',
     author='Gopal Narayanan',
     author_email='gopal@astro.umass.edu',
-    install_requires=['numpy', 'matplotlib', 'pandas'],
+    #install_requires=['numpy', 'matplotlib', 'pandas'],
     packages=['omayanb'],
     #scripts=[]
 )
