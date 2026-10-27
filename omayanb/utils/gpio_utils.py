@@ -1,6 +1,7 @@
 import os
 import datetime
 import logging
+import time
 
 import RPi.GPIO as GPIO
 
@@ -112,4 +113,38 @@ class NarrowBand(object):
         GPIO.output(self.pin_ds, GPIO.HIGH)
         return byte_value
 
+    def read_lsbmsb(self, addr):
+        """
+        read lsbmsb (short) from if processor.  write address, then read
+        data lsb, data msb from if processor
+        """
+        self.write_adrs(addr)
 
+        # configure all data bits as inputs
+        for pin in self.data_pins:
+            GPIO.setup(pin, GPIO.IN)
+
+        # set IF R/W to read
+        GPIO.output(self.pin_rw, GPIO.HIGH)
+
+        # generate data strobe
+        GPIO.output(self.pin_ds, GPIO.HIGH)
+        GPIO.output(self.pin_ds, GPIO.LOW)
+        time.sleep(0.5)
+
+        # parallel read data pins
+        lsb_value = 0
+        for pin in self.address_pins:
+            lsb_value = (lsb_value << 1)|GPIO.input(pin)
+
+        msb_value = 0
+        for pin in self.data_pins[8:]:
+            msb_value = (msb_value << 1)|GPIO.input(pin)
+
+        #reset data strobe
+        GPIO.output(self.pin_ds, GPIO.HIGH)
+
+        return (msb_value << 8)|lsb_value
+    
+
+    
