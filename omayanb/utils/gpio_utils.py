@@ -131,7 +131,7 @@ class NarrowBand(object):
         # generate data strobe
         GPIO.output(self.pin_ds, GPIO.HIGH)
         GPIO.output(self.pin_ds, GPIO.LOW)
-        time.sleep(0.5)
+        time.sleep(0.005)
 
         # parallel read data pins
         lsb_value = 0
