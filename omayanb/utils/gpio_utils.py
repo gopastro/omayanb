@@ -87,6 +87,8 @@ class NarrowBand(object):
         GPIO.output(self.pin_ds, GPIO.HIGH)
         self._print("Generated data strobe")
         # Set data inputs to input
+        for pin in self.address_pins:
+            GPIO.setup(pin, GPIO.IN)                
         # Set R/W to R
         GPIO.output(self.pin_rw, GPIO.HIGH)
     
@@ -163,7 +165,8 @@ class NarrowBand(object):
             # Do a start conversion for every 4th read
             if not (channel % 4):
                 data = self.read_short(base_addr)
-
+                self._print("SOC done: data: %s" % data)
+        
             # Read 4 voltages from base_addr + 1
             adrs = base_addr + 1
             for trycnt in range(5):
