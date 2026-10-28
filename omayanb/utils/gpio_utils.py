@@ -168,12 +168,12 @@ class NarrowBand(object):
             adrs = base_addr + 1
             for trycnt in range(5):
                 data = self.read_short(adrs)
-                data = data & ~0x8000  # clear 16th bit
-                if not (data & 0x8000):
-                    data = data & 0x0FFF
-                    data += 2048
-                    data = data % 4096
-                    break
+                #data = data & ~0x8000  # clear 16th bit
+                #if not (data & 0x8000):
+                data = data & 0x0FFF
+                data += 2048
+                data = data % 4096
+                    #break
             self._print("Data: %s" % data)
             levels.append((data/4096.0) * 10.0)
         return levels
