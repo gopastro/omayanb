@@ -157,8 +157,9 @@ class NarrowBand(object):
         Given a card's base address and a
         channel (0 - 3) within it, read and get level
         """
-        # Do a start conversion
-        data = self.read_short(base_addr)
+        # Do a start conversion for every 4th read
+        if not (channel % 4):
+            data = self.read_short(base_addr)
 
         # Read 4 voltages from base_addr + 1
         adrs = base_addr + 1
