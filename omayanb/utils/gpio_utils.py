@@ -141,7 +141,7 @@ class NarrowBand(object):
         msb_value = 0
         for pin in self.data_pins[8:]:
             msb_value = (msb_value << 1)|GPIO.input(pin)
-        self._print("LSB: 0x%x; MSB: 0x%x" % (lsb_value, msv_value))
+        self._print("LSB: 0x%x; MSB: 0x%x" % (lsb_value, msb_value))
         #reset data strobe
         GPIO.output(self.pin_ds, GPIO.HIGH)
 
