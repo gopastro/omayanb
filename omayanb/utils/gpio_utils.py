@@ -145,7 +145,35 @@ class NarrowBand(object):
         GPIO.output(self.pin_ds, GPIO.HIGH)
 
         return lsb_value | (msb_value << 8)
-    
+
+    def read_short(self, addr):
+        """
+        wrapper for read_lsbmsb
+        """
+        return self.read_lsbmsb(addr)
+
+    def get_level(self, base_addr, channel):
+        """
+        Given a card's base address and a
+        channel (0 - 3) within it, read and get level
+        """
+        # Do a start conversion
+        data = self.read_short(base_addr)
+
+        # Read 4 voltages from base_addr + 1
+        adrs = base_addr + 1
+        for trycnt in range(5):
+            data = self.read_short(adrs)
+            data = data & ~0x8000  # clear 16th bit
+            if not (data & 0x8000):
+                data = data & 0x0FFF
+                data += 2048
+                data = data % 4096
+                break
+        level = (data/4096.0) * 10.0
+        return level
+                
+        
     
 
     
