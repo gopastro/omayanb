@@ -152,27 +152,29 @@ class NarrowBand(object):
         """
         return self.read_lsbmsb(addr)
 
-    def get_level(self, base_addr, channel):
+    def get_levels(self, base_addr):
         """
-        Given a card's base address and a
-        channel (0 - 3) within it, read and get level
+        Given a card's base address get 
+        channel (0 - 3) within it, read and get levels
         """
-        # Do a start conversion for every 4th read
-        if not (channel % 4):
-            data = self.read_short(base_addr)
+        levels = []
+        for channel in range(4):
+            # Do a start conversion for every 4th read
+            if not (channel % 4):
+                data = self.read_short(base_addr)
 
-        # Read 4 voltages from base_addr + 1
-        adrs = base_addr + 1
-        for trycnt in range(5):
-            data = self.read_short(adrs)
-            data = data & ~0x8000  # clear 16th bit
-            if not (data & 0x8000):
-                data = data & 0x0FFF
-                data += 2048
-                data = data % 4096
-                break
-        level = (data/4096.0) * 10.0
-        return level
+            # Read 4 voltages from base_addr + 1
+            adrs = base_addr + 1
+            for trycnt in range(5):
+                data = self.read_short(adrs)
+                data = data & ~0x8000  # clear 16th bit
+                if not (data & 0x8000):
+                    data = data & 0x0FFF
+                    data += 2048
+                    data = data % 4096
+                    break
+            levels.append((data/4096.0) * 10.0)
+        return levels
                 
         
     
