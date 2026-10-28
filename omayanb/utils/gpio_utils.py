@@ -88,7 +88,8 @@ class NarrowBand(object):
         self._print("Generated data strobe")
         # Set data inputs to input
         # Set R/W to R
-        
+        GPIO.output(self.pin_rw, GPIO.HIGH)
+    
     def read_byte(self, addr):
         """
         read byte from IF processor
@@ -173,6 +174,7 @@ class NarrowBand(object):
                     data += 2048
                     data = data % 4096
                     break
+            self._print("Data: %s" % data)
             levels.append((data/4096.0) * 10.0)
         return levels
                 
