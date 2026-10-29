@@ -169,6 +169,7 @@ class NarrowBand(object):
         
             # Read 4 voltages from base_addr + 1
             adrs = base_addr + 1
+            data = 0
             for trycnt in range(5):
                 data = self.read_short(adrs)
                 #data = data & ~0x8000  # clear 16th bit
