@@ -116,7 +116,7 @@ class NarrowBand(object):
         GPIO.output(self.pin_ds, GPIO.HIGH)
         return byte_value
 
-    def read_lsbmsb(self, addr):
+    def read_lsbmsb(self, addr, pud=GPIO.PUD_OFF):
         """
         read lsbmsb (short) from if processor.  write address, then read
         data lsb, data msb from if processor
@@ -125,7 +125,7 @@ class NarrowBand(object):
 
         # configure all data bits as inputs
         for pin in self.data_pins:
-            GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+            GPIO.setup(pin, GPIO.IN, pull_up_down=pud)
 
         # set IF R/W to read
         GPIO.output(self.pin_rw, GPIO.HIGH)
@@ -150,13 +150,13 @@ class NarrowBand(object):
         return (msb_value << 8) | lsb_value
         #return (lsb_value << 8) | msb_value
 
-    def read_short(self, addr):
+    def read_short(self, addr, pud=GPIO.PUD_OFF):
         """
         wrapper for read_lsbmsb
         """
-        return self.read_lsbmsb(addr)
+        return self.read_lsbmsb(addr, pud=pud)
 
-    def get_levels(self, base_addr):
+    def get_levels(self, base_addr, pud=GPIO.PUD_OFF):
         """
         Given a card's base address get 
         channel (0 - 3) within it, read and get levels
@@ -165,14 +165,14 @@ class NarrowBand(object):
         for channel in range(4):
             # Do a start conversion for every 4th read
             if not (channel % 4):
-                data = self.read_short(base_addr)
+                data = self.read_short(base_addr, pud=pud)
                 self._print("SOC done: data: %s" % data)
         
             # Read 4 voltages from base_addr + 1
             adrs = base_addr + 1
             data = 0
             for trycnt in range(5):
-                data = self.read_short(adrs)
+                data = self.read_short(adrs, pud=pud)
                 #data = data & ~0x8000  # clear 16th bit
                 if not (data & 0x8000):
                     data = data & 0x0FFF
