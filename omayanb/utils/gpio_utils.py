@@ -181,6 +181,7 @@ class NarrowBand(object):
                     break
             self._print("Data: %s, trycnt: %d" % (data, trycnt))
             levels.append((data/4096.0) * 10.0)
+            time.sleep(0.01)
         return levels
                 
         
