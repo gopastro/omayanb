@@ -176,10 +176,10 @@ class NarrowBand(object):
                 #data = data & ~0x8000  # clear 16th bit
                 if not (data & 0x8000):
                     data = data & 0x0FFF
-                    #data += 2048
+                    data += 2048
                     data = data % 4096
                     break
-            self._print("Data: %s" % data)
+            self._print("Data: %s, trycnt: %d" % (data, trycnt))
             levels.append((data/4096.0) * 10.0)
         return levels
                 
