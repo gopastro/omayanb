@@ -125,7 +125,7 @@ class NarrowBand(object):
 
         # configure all data bits as inputs
         for pin in self.data_pins:
-            GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+            GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
         # set IF R/W to read
         GPIO.output(self.pin_rw, GPIO.HIGH)
