@@ -32,7 +32,7 @@ class NarrowBand(object):
         GPIO.setmode(GPIO.BCM)
         self._print('Setting BCM Mode')
         for pin in (self.pin_rw, self.pin_as, self.pin_ds):
-            GPIO.setup(pin, GPIO.OUT, pull_up_down=GPIO.PUD_DOWN )
+            GPIO.setup(pin, GPIO.OUT)
         self._print("Setting RW, AS, and DS pins to output pins")
         
     def _print(self, msg, loglevel=logging.INFO, ):
