@@ -28,6 +28,7 @@ class NarrowBand(object):
         self.data_pins = [4, 5, 6, 7, 8, 9, 10, 11,
                           12, 13, 14, 15, 16, 17, 18, 19
                           ]
+        GPIO.cleanup()
         # Set pin numbering mode
         GPIO.setmode(GPIO.BCM)
         self._print('Setting BCM Mode')
