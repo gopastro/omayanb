@@ -148,8 +148,8 @@ class NarrowBand(object):
         #reset data strobe
         GPIO.output(self.pin_ds, GPIO.HIGH)
 
-        return (msb_value << 8) | lsb_value
-        #return (lsb_value << 8) | msb_value
+        #return (msb_value << 8) | lsb_value
+        return (lsb_value << 8) | msb_value
 
     def read_short(self, addr, pud=GPIO.PUD_OFF):
         """
