@@ -4,7 +4,7 @@ import logging
 import time
 
 import RPi.GPIO as GPIO
-
+#import pigpio
 
 class NarrowBand(object):
     """
@@ -35,6 +35,7 @@ class NarrowBand(object):
         for pin in (self.pin_rw, self.pin_as, self.pin_ds):
             GPIO.setup(pin, GPIO.OUT)
         self._print("Setting RW, AS, and DS pins to output pins")
+        #self.pi = pigpio.pi()
         
     def _print(self, msg, loglevel=logging.INFO, ):
         if self.debug:
@@ -110,7 +111,7 @@ class NarrowBand(object):
 
         # parallel read data pins
         byte_value = 0
-        for pin in self.address_pins:
+        for pin in reversed(self.address_pins):
             byte_value = (byte_value << 1)|GPIO.input(pin)
 
         # reset data probe
@@ -138,19 +139,22 @@ class NarrowBand(object):
 
         # parallel read data pins
         lsb_value = 0
-        for pin in self.address_pins:
+        for pin in reversed(self.address_pins):
             lsb_value = (lsb_value << 1)|GPIO.input(pin)
 
         msb_value = 0
-        for pin in self.data_pins[8:]:
+        for pin in reversed(self.data_pins[8:]):
             msb_value = (msb_value << 1)|GPIO.input(pin)
+            
         self._print("LSB: 0x%x; MSB: 0x%x" % (lsb_value, msb_value))
         #reset data strobe
         GPIO.output(self.pin_ds, GPIO.HIGH)
 
-        #return (msb_value << 8) | lsb_value
-        return (lsb_value << 8) | msb_value
+        return (msb_value << 8) | lsb_value
+        #return (lsb_value << 8) | msb_value
 
+        
+        
     def read_short(self, addr, pud=GPIO.PUD_OFF):
         """
         wrapper for read_lsbmsb
