@@ -53,7 +53,3 @@ class NarrowbandIFProcessor(object):
                     nb.write_byte(base_addr+chan, default|(co<<6))
                     self.atten_values[bank][bchan+chan] = default
                     time.sleep(0.01)
-
-                
-                        
-    '
