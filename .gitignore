@@ -9,6 +9,8 @@
 *.egg
 *.egg-info
 *.pid
+\#*\#
+.\#*
 
 # Node artifact files
 node_modules/
