@@ -54,9 +54,9 @@ def will_debug():
     return logger.isEnabledFor(pylogging.DEBUG)
 
 def add_file_handler(log, fname):
-    #handler = handlers.RotatingFileHandler(fname, maxBytes=20480,
-    #                                       backupCount=5)
-    handler = pylogging.FileHandler(fname)
+    handler = handlers.RotatingFileHandler(fname, maxBytes=1000000,
+                                           backupCount=1)
+    #handler = pylogging.FileHandler(fname)
     # create formatter
     formatter = pylogging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     #level = omayanbParams['omayanb'].get('loglevel', 10)
