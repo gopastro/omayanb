@@ -16,11 +16,6 @@ class NarrowBand(object):
     """
     def __init__(self, debug=True):
         self.debug = debug
-        logdir = os.path.join(os.path.expanduser('~'), 'logs')
-        logfile = os.path.join(logdir, datetime.datetime.now().strftime('omayanb_%Y_%m_%d_%H%M.log'))
-        logging.basicConfig(filename=logfile,
-                            level=logging.INFO,
-                            format='%(asctime)s %(levelname)s: %(message)s')
         self.pin_rw = 20           # Pin for R/W
         self.pin_as = 21           # Pin for Address Strobe
         self.pin_ds = 22           # Pin for Data Strobe
