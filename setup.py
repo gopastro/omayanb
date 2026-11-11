@@ -11,6 +11,6 @@ setup(
     author='Gopal Narayanan',
     author_email='gopal@astro.umass.edu',
     #install_requires=['numpy', 'matplotlib', 'pandas'],
-    packages=['omayanb'],
+    packages=find_packages(), #['omayanb'],
     #scripts=[]
 )
