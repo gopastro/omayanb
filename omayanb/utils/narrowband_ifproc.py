@@ -72,6 +72,12 @@ class NarrowbandIFProcessor(object):
                 self.set_atten(bank, chan, default)
                 time.sleep(0.01)
 
+    def get_all_iflevels(self):
+        for bank in ('A', 'B'):
+            for chan in range(17, 33):
+                level = self.get_level(bank, chan)
+                self._print("IF Level for %d%s is %s" % (chan, bank, level))
+        
     def get_base_chan(self, value):
         bchan = (17, 21, 25, 29)
         if value < 17:
