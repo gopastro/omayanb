@@ -76,7 +76,8 @@ class OMAyANBSocketServer():
             self._print("No connection")
 
     def process_omayanb_command(self):
-        self.data = self.recv(1024)
+        data = self.recv(1024)
+        self.data = data.decode()
         if not self.data:
             return False
         else:
