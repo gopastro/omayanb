@@ -77,7 +77,7 @@ class NarrowbandIFProcessor(object):
             value = 0
         if value > 31:
             value = 31
-        bchan, chan = get_base_chan(channel)
+        bchan, chan = self.get_base_chan(channel)
         base_addr = address_mapper.get('%d%s' % (bchan, bank))
         self.nb.write_byte(base_addr+chan, value|(self.co<<6))
         self.atten_values[bank][bchan + chan] = value
