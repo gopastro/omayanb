@@ -2,7 +2,7 @@
 import sys
 from optparse import OptionParser
 import omayanb
-from omayanb.tcpip.omaynb_socket_server import OMAyANBSocketServer
+from omayanb.tcpip.omayanb_socket_server import OMAyANBSocketServer
 from omayanb.logging import logger
 import daemon
 from daemon import pidfile
