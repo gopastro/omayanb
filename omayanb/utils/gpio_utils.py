@@ -4,7 +4,10 @@ import logging
 import time
 
 import RPi.GPIO as GPIO
+from omayanb.logging import logger
+
 #import pigpio
+logger.name = __name__
 
 class NarrowBand(object):
     """
@@ -35,7 +38,7 @@ class NarrowBand(object):
     def _print(self, msg, loglevel=logging.INFO, ):
         if self.debug:
             print(msg)
-        logging.log(level=loglevel, msg=msg)
+        logger.info(msg)
     
     def write_adrs(self, addr):
         """

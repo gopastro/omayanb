@@ -5,7 +5,9 @@ import time
 import bisect
 
 from .gpio_utils import NarrowBand
+from omayanb.logging import logger
 
+logger.name = __name__
 address_mapper = {
     '17A': 0x90,
     '21A': 0x94,
@@ -21,11 +23,11 @@ address_mapper = {
 class NarrowbandIFProcessor(object):
     def __init__(self, debug=True):
         self.debug = debug
-        logdir = os.path.join(os.path.expanduser('~'), 'logs')
-        logfile = os.path.join(logdir, datetime.datetime.now().strftime('omayanb_%Y_%m_%d_%H%M.log'))
-        logging.basicConfig(filename=logfile,
-                            level=logging.INFO,
-                            format='%(asctime)s %(levelname)s: %(message)s')
+        # logdir = os.path.join(os.path.expanduser('~'), 'logs')
+        # logfile = os.path.join(logdir, datetime.datetime.now().strftime('omayanb_%Y_%m_%d_%H%M.log'))
+        # logging.basicConfig(filename=logfile,
+        #                     level=logging.INFO,
+        #                     format='%(asctime)s %(levelname)s: %(message)s')
         self.atten_values = {'A':
                              {17:0, 18:0, 19:0, 20:0,
                               21:0, 22:0, 23:0, 24:0,
@@ -56,10 +58,10 @@ class NarrowbandIFProcessor(object):
         self.co = 0
         self.start_all()
 
-    def _print(self, msg, loglevel=logging.INFO, ):
+    def _print(self, msg):
         if self.debug:
             print(msg)
-        logging.log(level=loglevel, msg=msg)
+        logger.info(msg)
         
     def start_all(self):
         self.set_init_attenuations(default=0, co=0)
