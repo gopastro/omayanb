@@ -23,12 +23,12 @@ def _get_omayanb_logname():
     """
     Returns the path to the omayanb log file
     """
-    if os.environ.has_key('HOME'):
-        home = os.environ['HOME']
-        if os.path.exists(os.path.join(home, 'logs')):
+    homedir = os.path.expanduser('~')
+    if os.path.exists(homedir):
+        if os.path.exists(os.path.join(homedir, 'logs')):
             fname = os.path.join(home, 'logs', datetime.datetime.now().strftime('omayanb_%Y_%m_%d_%H%M.log'))
         else:
-            fname = os.path.join(home, datetime.datetime.now().strftime('omayanb_%Y_%m_%d_%H%M.log'))
+            fname = os.path.join(homedir, datetime.datetime.now().strftime('omayanb_%Y_%m_%d_%H%M.log'))
         return fname
     else:
         return datetime.datetime.now().strftime('omayanb_%Y_%m_%d_%H%M.log')
