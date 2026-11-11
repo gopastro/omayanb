@@ -26,7 +26,7 @@ def _get_omayanb_logname():
     homedir = os.path.expanduser('~')
     if os.path.exists(homedir):
         if os.path.exists(os.path.join(homedir, 'logs')):
-            fname = os.path.join(home, 'logs', datetime.datetime.now().strftime('omayanb_%Y_%m_%d_%H%M.log'))
+            fname = os.path.join(homedir, 'logs', datetime.datetime.now().strftime('omayanb_%Y_%m_%d_%H%M.log'))
         else:
             fname = os.path.join(homedir, datetime.datetime.now().strftime('omayanb_%Y_%m_%d_%H%M.log'))
         return fname
