@@ -116,4 +116,4 @@ class OMAyANBSocketServer():
         if self.conn:
             self.send('closed')
             self.conn.close()
-            self.printlog("Connection to client closed")
+            self._print("Connection to client closed")
