@@ -95,4 +95,19 @@ class OMAyANBSocketServer():
                 atten = self.nbif.get_atten(bank, channel)
                 self.send("%s %s %s:  %s\n" % (msg[0], msg[1], msg[2], atten))
 
-       
+    def send(self, msg):
+        if self.conn:
+            self.conn.send(msg)
+
+    def receive_with_size(self, msglen):
+        msg = ''
+        while len(msg) < msglen:
+            chunk = self.sock.recv(msglen-len(msg))
+            if chunk == '':
+                raise RuntimeError, "socket connection broken"
+            msg = msg + chunk
+        return msg
+    
+    def close(self):
+        self.sock.close()
+
