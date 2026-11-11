@@ -97,7 +97,7 @@ class OMAyANBSocketServer():
 
     def send(self, msg):
         if self.conn:
-            self.conn.send(msg)
+            self.conn.send(msg.encode()[:1024])
 
     def receive_with_size(self, msglen):
         msg = ''
