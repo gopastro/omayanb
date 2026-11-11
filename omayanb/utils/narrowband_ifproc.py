@@ -39,6 +39,19 @@ class NarrowbandIFProcessor(object):
                               29:0, 30:0, 31:0, 32:0,
                               },
                              }
+        self.iflevels = {'A':
+                         {17:0, 18:0, 19:0, 20:0,
+                          21:0, 22:0, 23:0, 24:0,
+                          25:0, 26:0, 27:0, 28:0,
+                          29:0, 30:0, 31:0, 32:0,
+                          },
+                         'B':
+                         {17:0, 18:0, 19:0, 20:0,
+                          21:0, 22:0, 23:0, 24:0,
+                          25:0, 26:0, 27:0, 28:0,
+                          29:0, 30:0, 31:0, 32:0,
+                          },
+                         }        
         self.nb = NarrowBand()
         self.co = 0
         self.start_all()
@@ -50,7 +63,8 @@ class NarrowbandIFProcessor(object):
         
     def start_all(self):
         self.set_init_attenuations(default=0, co=0)
-
+        self.get_all_iflevels()
+        
     def set_init_attenuations(self, default=0, co=0):
         self.co = co
         for bank in ('A', 'B'):
@@ -81,4 +95,10 @@ class NarrowbandIFProcessor(object):
         base_addr = address_mapper.get('%d%s' % (bchan, bank))
         self.nb.write_byte(base_addr+chan, value|(self.co<<6))
         self.atten_values[bank][bchan + chan] = value
-        
+
+    def get_level(self, bank, channel):
+        bchan, chan = self.get_base_chan(channel)
+        base_addr = address_mapper.get('%d%s' % (bchan, bank))
+        levels = self.nb.get_levels(base_addr)
+        self.iflevels[bank][channel] = levels[chan]
+        return levels[chan]

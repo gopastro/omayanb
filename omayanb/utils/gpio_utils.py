@@ -113,7 +113,7 @@ class NarrowBand(object):
         GPIO.output(self.pin_ds, GPIO.HIGH)
         return byte_value
 
-    def read_lsbmsb(self, addr, pud=GPIO.PUD_OFF):
+    def read_lsbmsb(self, addr, pud=GPIO.PUD_DOWN):
         """
         read lsbmsb (short) from if processor.  write address, then read
         data lsb, data msb from if processor
@@ -150,13 +150,13 @@ class NarrowBand(object):
 
         
         
-    def read_short(self, addr, pud=GPIO.PUD_OFF):
+    def read_short(self, addr, pud=GPIO.PUD_DOWN):
         """
         wrapper for read_lsbmsb
         """
         return self.read_lsbmsb(addr, pud=pud)
 
-    def get_levels(self, base_addr, pud=GPIO.PUD_OFF):
+    def get_levels(self, base_addr, pud=GPIO.PUD_DOWN):
         """
         Given a card's base address get 
         channel (0 - 3) within it, read and get levels
