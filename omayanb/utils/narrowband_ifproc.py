@@ -108,3 +108,7 @@ class NarrowbandIFProcessor(object):
         levels = self.nb.get_levels(base_addr)
         self.iflevels[bank][channel] = levels[chan]
         return levels[chan]
+
+    def get_atten(self, bank, channel):
+        return self.atten_values[bank][channel]
+
