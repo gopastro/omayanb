@@ -48,3 +48,50 @@ class MSIP1mmSocketServer():
             excArgs = "<no args>"
         excTb = traceback.format_tb(trbk, maxTBlevel)
         return (excName, excArgs, excTb)
+
+    def _print(self, msg):
+        if self.debug:
+            print(msg)
+        logger.info(msg)    
+
+    def listen(self, numconnections=10):
+        self.sock.listen(numconnections)
+
+    def accept(self):
+        self.conn, self.addr = self.sock.accept()
+        self._print("Connected by %s" % repr(self.addr))
+        return True
+
+    def recv(self, maxlen=1024):
+        if self.conn:
+            try:
+                data = self.conn.recv(maxlen)
+                return data
+            except:
+                self._print("No data")
+                self.conn=None
+                return None
+        else:
+            self._print("No connection")
+
+    def process_omayanb_command(self):
+        self.data = self.recv(1024)
+        if not self.data:
+            return False
+        else:
+            msg = self.data.strip().split()
+            if not msg:
+                self.send("No command issued\n")
+                self._print("No command sent")
+                return True
+            if not msg[0] in allowed_commands:
+                logger.error("Request has to be one of %s" % allowed_commands)
+                self.send("%s no_such_command\n" % self.data.strip())
+                return True
+            if msg[0] == 'get_atten':
+                bank = msg[1]
+                channel = int(msg[2])
+                atten = self.nbif.get_atten(bank, channel)
+                self.send("%s %s %s:  %s\n" % (msg[0], msg[1], msg[2], atten))
+
+       
