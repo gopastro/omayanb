@@ -104,7 +104,7 @@ class OMAyANBSocketServer():
         while len(msg) < msglen:
             chunk = self.sock.recv(msglen-len(msg))
             if chunk == '':
-                raise RuntimeError, "socket connection broken"
+                raise RuntimeError("socket connection broken")
             msg = msg + chunk
         return msg
     
