@@ -11,6 +11,7 @@ import traceback
 import time
 #import logging
 from omayanb.utils.narrowband_ifproc import NarrowbandIFProcessor
+from omayanb.logging import logger
 
 
 #import SocketServer
@@ -18,7 +19,7 @@ logger.name = __name__
 
 allowed_commands = ['set_atten', 'get_atten', 'get_level']
 
-class MSIP1mmSocketServer():
+class OMAyANBSocketServer():
     debug = 0
     status_bytes = []
     status_dict = {}
