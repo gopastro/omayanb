@@ -64,7 +64,7 @@ def add_file_handler(log, fname):
     handler.setLevel(pylogging.DEBUG)
     handler.setFormatter(formatter)
     #print "Setting up Rotating File Handler %s" % fname
-    #log.addHandler(handler)
+    log.addHandler(handler)
 
 def add_stream_handler(log):
     handler = pylogging.StreamHandler()
