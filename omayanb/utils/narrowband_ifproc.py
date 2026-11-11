@@ -50,6 +50,6 @@ class NarrowbandIFProcessor(object):
             for bchan in range(17, 33, 4):
                 base_addr = address_mapper.get('%d%s' % (bchan, bank))
                 for chan in range(4):
-                    nb.write_byte(base_addr+chan, default|(co<<6))
+                    self.nb.write_byte(base_addr+chan, default|(co<<6))
                     self.atten_values[bank][bchan+chan] = default
                     time.sleep(0.01)
