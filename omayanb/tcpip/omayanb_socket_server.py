@@ -112,3 +112,8 @@ class OMAyANBSocketServer():
     def close(self):
         self.sock.close()
 
+    def conn_close(self):
+        if self.conn:
+            self.send('closed')
+            self.conn.close()
+            self.printlog("Connection to client closed")
