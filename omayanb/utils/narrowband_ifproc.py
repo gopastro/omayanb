@@ -2,6 +2,7 @@ import os
 import datetime
 import logging
 import time
+import bisect
 
 from .gpio_utils import NarrowBand
 
@@ -39,17 +40,45 @@ class NarrowbandIFProcessor(object):
                               },
                              }
         self.nb = NarrowBand()
+        self.co = 0
         self.start_all()
 
+    def _print(self, msg, loglevel=logging.INFO, ):
+        if self.debug:
+            print(msg)
+        logging.log(level=loglevel, msg=msg)
+        
     def start_all(self):
         self.set_init_attenuations(default=0, co=0)
 
     def set_init_attenuations(self, default=0, co=0):
         self.co = co
         for bank in ('A', 'B'):
-            for bchan in range(17, 33, 4):
-                base_addr = address_mapper.get('%d%s' % (bchan, bank))
-                for chan in range(4):
-                    self.nb.write_byte(base_addr+chan, default|(co<<6))
-                    self.atten_values[bank][bchan+chan] = default
-                    time.sleep(0.01)
+            for chan in range(17, 33):
+                self.set_atten(bank, chan, default)
+                time.sleep(0.01)
+
+    def get_base_chan(self, value):
+        bchan = (17, 21, 25, 29)
+        if value < 17:
+            value = 17
+            self._print("Channel should be between 17 to 32. Resetting to %d" % value)
+        if value > 32:
+            value = 32
+            self._print("Channel should be between 17 to 32. Resetting to %d" % value)
+        if value in bchan:
+            return (value, 0)
+        else:
+            idx = bisect.bisect_left(bchan, value)
+            return (bchan[idx-1], value - bchan[idx-1])
+
+    def set_atten(self, bank, channel, value):
+        if value < 0:
+            value = 0
+        if value > 31:
+            value = 31
+        bchan, chan = get_base_chan(channel)
+        base_addr = address_mapper.get('%d%s' % (bchan, bank))
+        self.nb.write_byte(base_addr+chan, value|(self.co<<6))
+        self.atten_values[bank][bchan + chan] = value
+        
