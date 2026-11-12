@@ -101,6 +101,7 @@ class NarrowbandIFProcessor(object):
             value = 31
         bchan, chan = self.get_base_chan(channel)
         base_addr = address_mapper.get('%d%s' % (bchan, bank))
+        self._print("set bank %s channel %s atten to %s" % (bank, channel, value))
         self.nb.write_byte(base_addr+chan, value|(self.co<<6))
         self.atten_values[bank][bchan + chan] = value
 
@@ -109,8 +110,10 @@ class NarrowbandIFProcessor(object):
         base_addr = address_mapper.get('%d%s' % (bchan, bank))
         levels = self.nb.get_levels(base_addr)
         self.iflevels[bank][channel] = levels[chan]
+        self._print("Getting level for  bank %s channel %s. Level: %s" % (bank, channel, levels[chan]))
         return levels[chan]
 
     def get_atten(self, bank, channel):
+        self._print("Getting Atten for  bank %s channel %s. Atten: %s" % (bank, channel, atten_values[bank][channel]))
         return self.atten_values[bank][channel]
 
