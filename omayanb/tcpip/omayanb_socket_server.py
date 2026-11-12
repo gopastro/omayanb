@@ -77,6 +77,7 @@ class OMAyANBSocketServer():
 
     def process_omayanb_command(self):
         data = self.recv(1024)
+        self._print(data)
         self.data = data.decode()
         if not self.data:
             return False
@@ -94,16 +95,19 @@ class OMAyANBSocketServer():
                 bank = msg[1]
                 channel = int(msg[2])
                 atten = self.nbif.get_atten(bank, channel)
+                self._print("Getting atten for bank %s channel %s. Atten: %s" % (bank, channel, atten))
                 self.send("%s %s %s:  %s\n" % (msg[0], msg[1], msg[2], atten))
             if msg[0] == 'get_level':
                 bank = msg[1]
                 channel = int(msg[2])
-                atten = self.nbif.get_level(bank, channel)
-                self.send("%s %s %s:  %s\n" % (msg[0], msg[1], msg[2], atten))                
+                level = self.nbif.get_level(bank, channel)
+                self._print("Getting level for bank %s channel %s. Level: %s" % (bank, channel, level))
+                self.send("%s %s %s:  %s\n" % (msg[0], msg[1], msg[2], level))                
             if msg[0] == 'set_atten':
                 bank = msg[1]
                 channel = int(msg[2])
                 atten = int(msg[3])
+                self._print("Setting atten for bank %s channel %s. Atten: %s" % (bank, channel, atten))
                 self.send("%s %s %s %s\n" % (msg[0], msg[1], msg[2], atten))
         return True
                 
