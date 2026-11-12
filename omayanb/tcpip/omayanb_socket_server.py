@@ -107,6 +107,7 @@ class OMAyANBSocketServer():
                 bank = msg[1]
                 channel = int(msg[2])
                 atten = int(msg[3])
+                self.nbif.set_atten(bank, channel, atten)
                 self._print("Setting atten for bank %s channel %s. Atten: %s" % (bank, channel, atten))
                 self.send("%s %s %s %s\n" % (msg[0], msg[1], msg[2], atten))
         return True
