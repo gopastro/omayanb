@@ -114,6 +114,6 @@ class NarrowbandIFProcessor(object):
         return levels[chan]
 
     def get_atten(self, bank, channel):
-        self._print("Getting Atten for  bank %s channel %s. Atten: %s" % (bank, channel, atten_values[bank][channel]))
+        self._print("Getting Atten for  bank %s channel %s. Atten: %s" % (bank, channel, self.atten_values[bank][channel]))
         return self.atten_values[bank][channel]
 
