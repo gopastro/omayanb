@@ -95,7 +95,18 @@ class OMAyANBSocketServer():
                 channel = int(msg[2])
                 atten = self.nbif.get_atten(bank, channel)
                 self.send("%s %s %s:  %s\n" % (msg[0], msg[1], msg[2], atten))
-
+            if msg[0] == 'get_level':
+                bank = msg[1]
+                channel = int(msg[2])
+                atten = self.nbif.get_level(bank, channel)
+                self.send("%s %s %s:  %s\n" % (msg[0], msg[1], msg[2], atten))                
+            if msg[0] == 'set_atten':
+                bank = msg[1]
+                channel = int(msg[2])
+                atten = int(msg[3])
+                self.send("%s %s %s %s\n" % (msg[0], msg[1], msg[2], atten))
+        return True
+                
     def send(self, msg):
         if self.conn:
             self.conn.send(msg.encode()[:1024])
